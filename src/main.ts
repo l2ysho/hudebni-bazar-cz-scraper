@@ -70,6 +70,8 @@ router.addHandler('DETAIL', async ({ request, $, pushData, log }) => {
                 // Store image in key-value store
                 await Actor.setValue(imageKey, imageBuffer, { contentType: `image/${extension}` });
                 log.info(`Stored image: ${imageKey}`);
+            } else {
+                log.warning(`Image download failed with HTTP status ${response.status}: ${fullImageUrl}`);
             }
         } catch (error) {
             log.warning(`Failed to download image from ${imageUrl}: ${error}`);
