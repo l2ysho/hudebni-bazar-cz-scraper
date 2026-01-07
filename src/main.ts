@@ -15,6 +15,7 @@ await Actor.init();
 // Structure of input is defined in input_schema.json
 const {
     category = '',
+    listingType = '',
     search = 'fender',
     maxRequestsPerCrawl = 100,
 } = (await Actor.getInput<Input>()) ?? ({} as Input);
@@ -73,7 +74,9 @@ const crawler = new CheerioCrawler({
     },
 });
 
-await crawler.run([`https://hudebnibazar.cz/${category}?f=${search}&kat=0`]);
+// Build URL with optional listing type parameter
+const listingTypeParam = listingType ? `&n=${listingType}` : '';
+await crawler.run([`https://hudebnibazar.cz/${category}?f=${search}&kat=0${listingTypeParam}`]);
 
 // Gracefully exit the Actor process. It's recommended to quit all Actors with an exit()
 await Actor.exit();
