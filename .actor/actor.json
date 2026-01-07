@@ -1,7 +1,7 @@
 {
     "$schema": "https://apify-projects.github.io/actor-json-schemas/actor.ide.json?v=0.6",
     "actorSpecification": 1,
-    "name": "hudebnibazarcz-actor",
+    "name": "hudebnibazar-cz-scraper",
     "title": "Project Cheerio Crawler Typescript",
     "description": "Crawlee and Cheerio project in typescript.",
     "version": "0.7",
