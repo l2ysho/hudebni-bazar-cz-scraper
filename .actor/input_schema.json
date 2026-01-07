@@ -1,0 +1,21 @@
+{
+    "$schema": "https://apify-projects.github.io/actor-json-schemas/input.ide.json?v=0.6",
+    "title": "CheerioCrawler Template",
+    "type": "object",
+    "schemaVersion": 1,
+    "properties": {
+        "search": {
+            "title": "search",
+            "type": "string",
+            "description": "something you are looking for",
+            "editor": "textfield",
+            "example": "fender"
+        },
+        "maxRequestsPerCrawl": {
+            "title": "Max Requests per Crawl",
+            "type": "integer",
+            "description": "Maximum number of requests that can be made by this crawler.",
+            "default": 100
+        }
+    }
+}
