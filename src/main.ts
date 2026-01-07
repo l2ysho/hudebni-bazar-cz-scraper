@@ -5,6 +5,7 @@ import { Actor } from 'apify';
 
 interface Input {
     category: string;
+    listingType: string;
     search: string;
     maxRequestsPerCrawl: number;
 }

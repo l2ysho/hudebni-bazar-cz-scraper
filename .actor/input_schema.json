@@ -39,6 +39,15 @@
             ],
             "default": ""
         },
+        "listingType": {
+            "title": "Listing Type",
+            "type": "string",
+            "description": "Type of listing to filter",
+            "editor": "select",
+            "enum": ["", "nabidka", "poptavka", "ruzne"],
+            "enumTitles": ["Vše", "Prodám", "Koupím", "Různé"],
+            "default": ""
+        },
         "search": {
             "title": "search",
             "type": "string",
