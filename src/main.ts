@@ -6,6 +6,7 @@ import { Actor } from 'apify';
 interface Input {
     category: string;
     listingType: string;
+    county: string;
     search: string;
     maxRequestsPerCrawl: number;
 }
@@ -16,6 +17,7 @@ await Actor.init();
 const {
     category = '',
     listingType = '',
+    county = '',
     search = 'fender',
     maxRequestsPerCrawl = 100,
 } = (await Actor.getInput<Input>()) ?? ({} as Input);
