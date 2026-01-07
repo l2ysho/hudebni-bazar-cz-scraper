@@ -107,11 +107,13 @@ const crawler = new CheerioCrawler({
     proxyConfiguration,
     maxRequestsPerCrawl,
     requestHandler: router,
-    useSessionPool: true,
+    // As hudebnibazar.cz store query params in cookie rather than URL, we need to persist cookies per session
     persistCookiesPerSession: true,
     sessionPoolOptions: {
+        // set pool size to 1 to ensure all requests are made with the same session
         maxPoolSize: 1,
         sessionOptions: {
+            // as default maxUsageCount is 50, we need to ensure it is the same as our maxRequestsPerCrawl
             maxUsageCount: maxRequestsPerCrawl,
         },
     },
