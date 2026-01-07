@@ -118,9 +118,21 @@ const crawler = new CheerioCrawler({
 });
 
 // Build URL with optional query parameters
-const listingTypeParam = listingType ? `&n=${listingType}` : '';
-const countyParam = county ? `&r=${county}` : '';
-await crawler.run([`https://hudebnibazar.cz/${category}?f=${search}&kat=0${listingTypeParam}${countyParam}`]);
+const params = new URLSearchParams({
+    f: search,
+    kat: '0',
+});
+
+if (listingType) {
+    params.set('n', listingType);
+}
+
+if (county) {
+    params.set('r', county);
+}
+
+const url = `https://hudebnibazar.cz/${category}?${params.toString()}`;
+await crawler.run([url]);
 
 // Gracefully exit the Actor process. It's recommended to quit all Actors with an exit()
 await Actor.exit();
