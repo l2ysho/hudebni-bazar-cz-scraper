@@ -31,10 +31,12 @@ const router = createCheerioRouter();
 router.addDefaultHandler(async ({ request, enqueueLinks, log }) => {
     log.info(`Enqueueing details from page: ${request.url}`);
 
+    // Enqueue links to diferent pages (from pagination element).
     await enqueueLinks({
         selector: '.str a',
     });
 
+    // Enqueue links to detail pages.
     await enqueueLinks({
         globs: ['**/ID*'],
         label: 'DETAIL',
