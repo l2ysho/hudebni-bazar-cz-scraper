@@ -4,6 +4,7 @@ import { CheerioCrawler, createCheerioRouter } from '@crawlee/cheerio';
 import { Actor } from 'apify';
 
 interface Input {
+    category: string;
     search: string;
     maxRequestsPerCrawl: number;
 }
@@ -11,7 +12,11 @@ interface Input {
 // The init() call configures the Actor for its environment. It's recommended to start every Actor with an init()
 await Actor.init();
 // Structure of input is defined in input_schema.json
-const { search = 'fender', maxRequestsPerCrawl = 100 } = (await Actor.getInput<Input>()) ?? ({} as Input);
+const {
+    category = '',
+    search = 'fender',
+    maxRequestsPerCrawl = 100,
+} = (await Actor.getInput<Input>()) ?? ({} as Input);
 
 // `checkAccess` flag ensures the proxy credentials are valid, but the check can take a few hundred milliseconds.
 // Disable it for short runs if you are sure your proxy configuration is correct
@@ -67,7 +72,7 @@ const crawler = new CheerioCrawler({
     },
 });
 
-await crawler.run([`https://hudebnibazar.cz/?f=${search}&kat=0`]);
+await crawler.run([`https://hudebnibazar.cz/${category}?f=${search}&kat=0`]);
 
 // Gracefully exit the Actor process. It's recommended to quit all Actors with an exit()
 await Actor.exit();
