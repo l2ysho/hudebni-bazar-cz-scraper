@@ -1,7 +1,7 @@
 // Crawlee - web scraping and browser automation library (Read more at https://crawlee.dev)
 import { CheerioCrawler, createCheerioRouter } from '@crawlee/cheerio';
 // Apify SDK - toolkit for building Apify Actors (Read more at https://docs.apify.com/sdk/js/)
-import { Actor } from 'apify';
+import { Actor, KeyValueStore } from 'apify';
 
 interface Input {
     category: string;
@@ -78,6 +78,13 @@ router.addHandler('DETAIL', async ({ request, $, pushData, log }) => {
         }
     }
 
+    let publicUrl = null;
+
+    if (imageKey) {
+        const store = await KeyValueStore.open();
+        publicUrl = store.getPublicUrl(imageKey);
+    }
+
     const data = {
         title,
         description: $('div.InzeratText').text(),
@@ -87,7 +94,7 @@ router.addHandler('DETAIL', async ({ request, $, pushData, log }) => {
         url: request.url,
         date: date ?? '',
         type: $('div.label-poptavka').length ? 'request' : 'offer',
-        imageUrl: imageUrl ? `https://hudebnibazar.cz${imageUrl}` : null,
+        imageUrl: publicUrl,
         imageKey,
     };
 
