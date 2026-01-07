@@ -52,5 +52,6 @@
             "description": "Maximum number of requests that can be made by this crawler.",
             "default": 100
         }
-    }
+    },
+    "required": ["category"]
 }
