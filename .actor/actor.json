@@ -3,7 +3,7 @@
     "name": "hudebnibazarcz-actor",
     "title": "Project Cheerio Crawler Typescript",
     "description": "Crawlee and Cheerio project in typescript.",
-    "version": "0.6",
+    "version": "0.7",
     "buildTag": "latest",
     "meta": {
         "templateId": "ts-crawlee-cheerio",
