@@ -18,7 +18,7 @@ const {
     category = '',
     listingType = '',
     county = '',
-    search = 'fender',
+    search = '',
     maxRequestsPerCrawl = 100,
 } = (await Actor.getInput<Input>()) ?? ({} as Input);
 

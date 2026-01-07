@@ -1,78 +1,152 @@
-# TypeScript Crawlee & CheerioCrawler Actor Template
+# Hudební Bazar Scraper
 
-<!-- This is an Apify template readme -->
+Scrape musical instrument listings from [hudebnibazar.cz](https://hudebnibazar.cz) with advanced filtering options. Extract listing details including title, description, price, location, and automatically download high-resolution images.
 
-This template example was built with [Crawlee](https://crawlee.dev/) to scrape data from a website using [Cheerio](https://cheerio.js.org/) wrapped into [CheerioCrawler](https://crawlee.dev/api/cheerio-crawler/class/CheerioCrawler).
+## Features
 
-## Quick Start
+- **Flexible Filtering** - Search by category, listing type (sell/buy), region, and keywords
+- **Complete Data Extraction** - Title, description, price, location, date, and listing type
+- **Image Download** - Automatically downloads and stores high-resolution images in Apify key-value store
+- **Public Image URLs** - Get permanent public URLs for all images
+- **Pagination Support** - Automatically crawls through all result pages
+- **Proxy Support** - Built-in proxy rotation to prevent blocking
 
-Once you've installed the dependencies, start the Actor:
+## Input
+
+The actor accepts the following input parameters:
+
+| Field | Type | Description | Required |
+|-------|------|-------------|----------|
+| `category` | String | Category to scrape (guitars, drums, keyboards, etc.) | No |
+| `listingType` | String | Filter by listing type: `nabidka` (sell), `poptavka` (buy), `ruzne` (various) | No |
+| `county` | String | Filter by Czech region (1-14) or Slovakia (15) | No |
+| `search` | String | Search keyword (e.g., "fender", "yamaha") | No |
+| `maxRequestsPerCrawl` | Integer | Maximum number of pages to crawl | No (default: 100) |
+
+### Available Categories
+
+- Baskytary (Bass guitars)
+- Bicí nástroje (Drums)
+- Dřevěné dechové nástroje (Woodwind instruments)
+- Hudebníci a skupiny (Musicians and bands)
+- Klávesové nástroje (Keyboards)
+- Kytary (Guitars)
+- Lekce a učitelé (Lessons and teachers)
+- Ostatní kolem hudby (Other music-related)
+- Smyčcové nástroje (String instruments)
+- Studiová technika (Studio equipment)
+- Světelné aparatury (Lighting equipment)
+
+### Example Input
+
+```json
+{
+  "category": "kytary/110000/",
+  "listingType": "nabidka",
+  "county": "1",
+  "search": "fender",
+  "maxRequestsPerCrawl": 50
+}
+```
+
+## Output
+
+The actor stores results in the dataset with the following structure:
+
+```json
+{
+  "title": "Fender Stratocaster American Standard",
+  "description": "Prodám kytaru Fender Stratocaster...",
+  "descriptionExtra": null,
+  "price": "25 000 Kč",
+  "location": "Praha",
+  "url": "https://hudebnibazar.cz/inzerat/ID123456",
+  "date": "01.01.2024",
+  "type": "offer",
+  "imageUrl": "https://api.apify.com/v2/key-value-stores/.../image-123456.jpg",
+  "imageKey": "image-123456.jpg"
+}
+```
+
+### Output Fields
+
+- `title` - Listing title
+- `description` - Main description text
+- `descriptionExtra` - Additional description (currently null)
+- `price` - Listed price with currency
+- `location` - City or region where the item is located
+- `url` - Direct URL to the listing
+- `date` - Date when the listing was posted
+- `type` - Either "offer" (prodám) or "request" (koupím)
+- `imageUrl` - Public URL to the downloaded high-resolution image
+- `imageKey` - Key-value store key for the image
+
+## How It Works
+
+1. The scraper builds a search URL based on your filter criteria
+2. Crawls the listing pages and extracts links to individual listings
+3. Follows pagination to discover all matching results
+4. For each listing, extracts detailed information
+5. Downloads the main high-resolution image to Apify key-value store
+6. Generates a permanent public URL for each image
+7. Stores all data in the dataset
+
+## Use Cases
+
+- **Price Monitoring** - Track prices of specific instruments over time
+- **Market Research** - Analyze the used musical instrument market
+- **Deal Alerts** - Find the best deals on specific brands or models
+- **Inventory Building** - Build a database of available instruments
+- **Regional Analysis** - Compare prices across different regions
+
+## Performance
+
+- Uses session pooling for efficient crawling
+- Proxy rotation to avoid blocking
+- Cheerio-based scraping for fast performance
+- Typical run time: 1-5 minutes depending on result count
+
+## Integration
+
+This actor can be integrated with:
+- [Zapier](https://apify.com/integrations/zapier)
+- [Make](https://apify.com/integrations/make)
+- [Google Sheets](https://apify.com/integrations/google-sheets)
+- Any service via [Apify API](https://docs.apify.com/api/v2)
+
+## Local Development
+
+### Prerequisites
+
+- [Node.js](https://nodejs.org/) 16 or higher
+- [Apify CLI](https://docs.apify.com/cli/)
+
+### Installation
 
 ```bash
+# Clone the repository
+git clone <your-repo-url>
+cd hudebni-bazar-cz-scraper
+
+# Install dependencies
+npm install
+
+# Run locally
 apify run
 ```
 
-Once your Actor is ready, you can push it to the Apify Console:
+### Testing
 
-```bash
-apify login # first, you need to log in if you haven't already done so
+Create a test input in `.actor/INPUT.json`:
 
-apify push
+```json
+{
+  "search": "fender",
+  "maxRequestsPerCrawl": 10
+}
 ```
 
-## Project Structure
-
-```text
-.actor/
-├── actor.json # Actor config: name, version, env vars, runtime settings
-├── dataset_schena.json # Structure and representation of data produced by an Actor
-├── input_schema.json # Input validation & Console form definition
-└── output_schema.json # Specifies where an Actor stores its output
-src/
-└── main.ts # Actor entry point and orchestrator
-storage/ # Local storage (mirrors Cloud during development)
-├── datasets/ # Output items (JSON objects)
-├── key_value_stores/ # Files, config, INPUT
-└── request_queues/ # Pending crawl requests
-Dockerfile # Container image definition
-```
-
-For more information, see the [Actor definition](https://docs.apify.com/platform/actors/development/actor-definition) documentation.
-
-## How it works
-
-This code is a TypeScript script that uses Cheerio to scrape data from a website. It then stores the website titles in a dataset.
-
-- The crawler starts with URLs provided from the input `startUrls` field defined by the input schema. Number of scraped pages is limited by `maxPagesPerCrawl` field from the input schema.
-- The crawler uses `requestHandler` for each URL to extract the data from the page with the Cheerio library and to save the title and URL of each page to the dataset. It also logs out each result that is being saved.
-
-## What's included
-
-- **[Apify SDK](https://docs.apify.com/sdk/js)** - toolkit for building [Actors](https://apify.com/actors)
-- **[Crawlee](https://crawlee.dev/)** - web scraping and browser automation library
-- **[Input schema](https://docs.apify.com/platform/actors/development/input-schema)** - define and easily validate a schema for your Actor's input
-- **[Dataset](https://docs.apify.com/sdk/python/docs/concepts/storages#working-with-datasets)** - store structured data where each object stored has the same attributes
-- **[Cheerio](https://cheerio.js.org/)** - a fast, flexible & elegant library for parsing and manipulating HTML and XML
-- **[Proxy configuration](https://docs.apify.com/platform/proxy)** - rotate IP addresses to prevent blocking
-
-## Resources
-
-- [Quick Start](https://docs.apify.com/platform/actors/development/quick-start) guide for building your first Actor
-- [Video tutorial](https://www.youtube.com/watch?v=yTRHomGg9uQ) on building a scraper using CheerioCrawler
-- [Written tutorial](https://docs.apify.com/academy/web-scraping-for-beginners/challenge) on building a scraper using CheerioCrawler
-- [Web scraping with Cheerio in 2023](https://blog.apify.com/web-scraping-with-cheerio/)
-- How to [scrape a dynamic page](https://blog.apify.com/what-is-a-dynamic-page/) using Cheerio
-- [Integration with Zapier](https://apify.com/integrations), Make, Google Drive and others
-- [Video guide on getting data using Apify API](https://www.youtube.com/watch?v=ViYYDHSBAKM)
-
-## Creating Actors with templates
-
-[How to create Apify Actors with web scraping code templates](https://www.youtube.com/watch?v=u-i-Korzf8w)
-
-
-## Getting started
-
-For complete information [see this article](https://docs.apify.com/platform/actors/development#build-actor-locally). To run the Actor use the following command:
+Then run:
 
 ```bash
 apify run
@@ -80,34 +154,35 @@ apify run
 
 ## Deploy to Apify
 
-### Connect Git repository to Apify
-
-If you've created a Git repository for the project, you can easily connect to Apify:
+### Option 1: Link Git Repository
 
 1. Go to [Actor creation page](https://console.apify.com/actors/new)
-2. Click on **Link Git Repository** button
+2. Click on **Link Git Repository**
+3. Connect your repository
 
-### Push project on your local machine to Apify
+### Option 2: Push from Local Machine
 
-You can also deploy the project on your local machine to Apify without the need for the Git repository.
+```bash
+# Login to Apify
+apify login
 
-1. Log in to Apify. You will need to provide your [Apify API Token](https://console.apify.com/account/integrations) to complete this action.
+# Deploy the actor
+apify push
+```
 
-    ```bash
-    apify login
-    ```
+## Resources
 
-2. Deploy your Actor. This command will deploy and build the Actor on the Apify Platform. You can find your newly created Actor under [Actors -> My Actors](https://console.apify.com/actors?tab=my).
+- [Apify SDK Documentation](https://docs.apify.com/sdk/js)
+- [Crawlee Documentation](https://crawlee.dev/)
+- [Cheerio Documentation](https://cheerio.js.org/)
+- [Web Scraping Tutorial](https://docs.apify.com/academy/web-scraping-for-beginners)
+- [Apify Platform Documentation](https://docs.apify.com/platform)
+- [Join our Discord community](https://discord.com/invite/jyEM2PRvMU)
 
-    ```bash
-    apify push
-    ```
+## Support
 
-## Documentation reference
+For bugs or feature requests, please [open an issue](https://github.com/your-username/hudebni-bazar-cz-scraper/issues).
 
-To learn more about Apify and Actors, take a look at the following resources:
+## License
 
-- [Apify SDK for JavaScript documentation](https://docs.apify.com/sdk/js)
-- [Apify SDK for Python documentation](https://docs.apify.com/sdk/python)
-- [Apify Platform documentation](https://docs.apify.com/platform)
-- [Join our developer community on Discord](https://discord.com/invite/jyEM2PRvMU)
+This project is licensed under the Apache-2.0 License.
