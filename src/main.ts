@@ -46,6 +46,34 @@ router.addHandler('DETAIL', async ({ request, $, pushData, log }) => {
 
     const location = /Lokalita: (.*?)/.exec($('div.user-udaje').text())?.[1];
     const title = $('h1').text();
+
+    // Extract image URL from the detail page
+    const imageElement = $('div.InzeratObrM a.fancybox');
+    const imageUrl = imageElement.attr('href');
+    let imageKey = null;
+
+    // Download and store image in key-value store if it exists
+    if (imageUrl) {
+        try {
+            const fullImageUrl = imageUrl.startsWith('http') ? imageUrl : `https://hudebnibazar.cz${imageUrl}`;
+            const response = await fetch(fullImageUrl);
+
+            if (response.ok) {
+                const imageBuffer = Buffer.from(await response.arrayBuffer());
+                // Create a unique key from the listing ID or image filename
+                const listingId = request.url.match(/ID(\d+)/)?.[1] || Date.now();
+                const extension = imageUrl.split('.').pop()?.split('?')[0] || 'jpg';
+                imageKey = `image-${listingId}.${extension}`;
+
+                // Store image in key-value store
+                await Actor.setValue(imageKey, imageBuffer, { contentType: `image/${extension}` });
+                log.info(`Stored image: ${imageKey}`);
+            }
+        } catch (error) {
+            log.warning(`Failed to download image from ${imageUrl}: ${error}`);
+        }
+    }
+
     const data = {
         title,
         description: $('div.InzeratText').text(),
@@ -55,6 +83,8 @@ router.addHandler('DETAIL', async ({ request, $, pushData, log }) => {
         url: request.url,
         date: date ?? '',
         type: $('div.label-poptavka').length ? 'request' : 'offer',
+        imageUrl: imageUrl ? `https://hudebnibazar.cz${imageUrl}` : null,
+        imageKey,
     };
 
     log.info(`url: ${request.url} is '${data.title}'`);
