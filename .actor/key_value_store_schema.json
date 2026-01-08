@@ -1,0 +1,17 @@
+{
+    "actorKeyValueStoreSchemaVersion": 1,
+    "title": "Key-Value Store Schema",
+    "collections": {
+        "documents": {
+            "title": "Documents",
+            "description": "Text documents stored by the Actor.",
+            "keyPrefix": "document-"
+        },
+        "images": {
+            "title": "Images",
+            "description": "Images stored by the Actor.",
+            "keyPrefix": "image-",
+            "contentTypes": ["image/jpeg"]
+        }
+    }
+}

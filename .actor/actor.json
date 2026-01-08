@@ -4,7 +4,7 @@
     "name": "hudebnibazar-cz-scraper",
     "title": "Hudební Bazar Scraper",
     "description": "Scrapes musical instrument listings from hudebnibazar.cz with filters for category, listing type, and region. Extracts listing details including title, description, price, location, and downloads high-resolution images to key-value store.",
-    "version": "0.9",
+    "version": "0.13",
     "buildTag": "latest",
     "meta": {
         "templateId": "ts-crawlee-cheerio",
@@ -13,7 +13,8 @@
     "input": "./input_schema.json",
     "output": "./output_schema.json",
     "storages": {
-        "dataset": "./dataset_schema.json"
+        "dataset": "./dataset_schema.json",
+        "keyValueStore": "./key_value_store_schema.json"
     },
     "dockerfile": "../Dockerfile"
 }
