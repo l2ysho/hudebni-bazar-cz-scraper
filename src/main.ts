@@ -65,6 +65,8 @@ router.addHandler('DETAIL', async ({ request, $, pushData, log }) => {
                 // Create a unique key from the listing ID or image filename
                 const listingId = request.url.match(/ID(\d+)/)?.[1] || Date.now();
                 const extension = imageUrl.split('.').pop()?.split('?')[0] || 'jpg';
+                log.info(`extension: ${extension}`);
+
                 imageKey = `image-${listingId}.${extension}`;
 
                 // Store image in key-value store
@@ -75,6 +77,7 @@ router.addHandler('DETAIL', async ({ request, $, pushData, log }) => {
             }
         } catch (error) {
             log.warning(`Failed to download image from ${imageUrl}: ${error}`);
+            throw error;
         }
     }
 
