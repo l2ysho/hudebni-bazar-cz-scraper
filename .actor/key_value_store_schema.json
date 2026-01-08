@@ -5,8 +5,7 @@
         "images": {
             "title": "Images",
             "description": "Images stored by the Actor.",
-            "keyPrefix": "image-",
-            "contentTypes": ["image/jpeg"]
+            "keyPrefix": "image-"
         }
     }
 }
