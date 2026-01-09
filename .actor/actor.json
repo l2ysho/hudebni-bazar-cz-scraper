@@ -1,0 +1,20 @@
+{
+    "$schema": "https://apify-projects.github.io/actor-json-schemas/actor.ide.json?v=0.6",
+    "actorSpecification": 1,
+    "name": "hudebnibazar-cz-scraper",
+    "title": "Hudební Bazar Scraper",
+    "description": "Scrapes musical instrument listings from hudebnibazar.cz with filters for category, listing type, and region. Extracts listing details including title, description, price, location, and downloads high-resolution images to key-value store.",
+    "version": "0.14",
+    "buildTag": "latest",
+    "meta": {
+        "templateId": "ts-crawlee-cheerio",
+        "generatedBy": "<FILL-IN-MODEL>"
+    },
+    "input": "./input_schema.json",
+    "output": "./output_schema.json",
+    "storages": {
+        "dataset": "./dataset_schema.json",
+        "keyValueStore": "./key_value_store_schema.json"
+    },
+    "dockerfile": "../Dockerfile"
+}

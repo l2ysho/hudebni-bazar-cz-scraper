@@ -1,0 +1,91 @@
+{
+    "$schema": "https://apify-projects.github.io/actor-json-schemas/input.ide.json?v=0.6",
+    "title": "CheerioCrawler Template",
+    "type": "object",
+    "schemaVersion": 1,
+    "properties": {
+        "category": {
+            "title": "Category",
+            "type": "string",
+            "description": "Category to scrape from hudebnibazar.cz",
+            "editor": "select",
+            "enum": [
+                "",
+                "baskytary/120000/",
+                "bici-nastroje/190000/",
+                "drevene-dechove-nastroje/150000/",
+                "hudebnici-a-skupiny/210000/",
+                "klavesove-nastroje/140000/",
+                "kytary/110000/",
+                "lekce-a-ucitele/340000/",
+                "ostatni-kolem-hudby/500000/",
+                "smyccove-nastroje/130000/",
+                "studiova-technika/310000/",
+                "svetelne-aparatury/320000/"
+            ],
+            "enumTitles": [
+                "Vše",
+                "Baskytary",
+                "Bicí nástroje",
+                "Dřevěné dechové nástroje",
+                "Hudebníci a skupiny",
+                "Klávesové nástroje",
+                "Kytary",
+                "Lekce a učitelé",
+                "Ostatní kolem hudby",
+                "Smyčcové nástroje",
+                "Studiová technika",
+                "Světelné aparatury"
+            ],
+            "default": ""
+        },
+        "listingType": {
+            "title": "Listing Type",
+            "type": "string",
+            "description": "Type of listing to filter",
+            "editor": "select",
+            "enum": ["", "nabidka", "poptavka", "ruzne"],
+            "enumTitles": ["Vše", "Prodám", "Koupím", "Různé"],
+            "default": ""
+        },
+        "county": {
+            "title": "County",
+            "type": "string",
+            "description": "Region to filter listings",
+            "editor": "select",
+            "enum": ["", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15"],
+            "enumTitles": [
+                "všechny kraje",
+                "Praha",
+                "Středočeský kraj",
+                "Jihočeský kraj",
+                "Plzeňský kraj",
+                "Karlovarský kraj",
+                "Ústecký kraj",
+                "Liberecký kraj",
+                "Královéhradecký kraj",
+                "Pardubický kraj",
+                "Kraj Vysočina",
+                "Jihomoravský kraj",
+                "Olomoucký kraj",
+                "Moravskoslezský kraj",
+                "Zlínský kraj",
+                "Slovensko"
+            ],
+            "default": ""
+        },
+        "search": {
+            "title": "search",
+            "type": "string",
+            "description": "something you are looking for",
+            "editor": "textfield",
+            "example": "fender"
+        },
+        "maxRequestsPerCrawl": {
+            "title": "Max Requests per Crawl",
+            "type": "integer",
+            "description": "Maximum number of requests that can be made by this crawler.",
+            "default": 100
+        }
+    }
+}

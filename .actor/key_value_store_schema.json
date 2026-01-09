@@ -1,0 +1,11 @@
+{
+    "actorKeyValueStoreSchemaVersion": 1,
+    "title": "Key-Value Store Schema",
+    "collections": {
+        "images": {
+            "title": "Images",
+            "description": "Images stored by the Actor.",
+            "keyPrefix": "image-"
+        }
+    }
+}
